@@ -1,0 +1,1020 @@
+{
+  "name": "DompetAI - Multimodal Personal Finance Tracker from Telegram Chat & Receipts using n8n",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -752,
+        192
+      ],
+      "id": "4a52468a-7852-4bf9-a272-8a95fe7cec3a",
+      "name": "Dari Telegram",
+      "webhookId": "eb336f67-6ccb-4a71-b81f-f42d4873ef99",
+      "credentials": {
+        "telegramApi": {
+          "id": "jwqs0eboHV0Bbqza",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ !!$json.message.text }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true",
+                      "singleValue": true
+                    },
+                    "id": "679d08db-65ac-4688-a165-c518c30d60f6"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Text"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "17786d14-8627-45cc-8df9-f10dfeed737d",
+                    "leftValue": "={{ !!$json.message.photo }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Photo"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "44a0dbad-b4e2-46bf-8755-5cb14ea1a83f",
+                    "leftValue": "={{ !!$json.message.voice }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Voice"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra",
+          "renameFallbackOutput": "lainnya",
+          "allMatchingOutputs": false
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        -528,
+        160
+      ],
+      "id": "f83dcb12-dd12-47e9-b36d-3bc8d5c8b8cb",
+      "name": "Deteksi Tipe Pesan"
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "={{ $json.message.voice.file_id }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -304,
+        192
+      ],
+      "id": "4700a20a-1f3b-4d17-9b23-fee28f67b42f",
+      "name": "Ambil Voice",
+      "webhookId": "ebebd3cb-d98d-4737-af17-bd82dcc91885",
+      "retryOnFail": true,
+      "credentials": {
+        "telegramApi": {
+          "id": "jwqs0eboHV0Bbqza",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "={{ $json.message.photo[3].file_id }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -304,
+        0
+      ],
+      "id": "36e7d04d-6173-4c9e-ac05-42f2be1b6bc6",
+      "name": "Ambil Photo",
+      "webhookId": "ebebd3cb-d98d-4737-af17-bd82dcc91885",
+      "retryOnFail": true,
+      "credentials": {
+        "telegramApi": {
+          "id": "jwqs0eboHV0Bbqza",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "27d36453-8cdc-464d-bdbd-0ca809e1c0b7",
+              "name": "raw_text",
+              "value": "={{ $json.message.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        144,
+        -192
+      ],
+      "id": "18844fc6-b72c-486e-8030-9800a8862180",
+      "name": "Text input"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "36f45522-22fe-460f-9f98-4bfe131b1536",
+              "name": "=raw_text",
+              "value": "={{ $json.content.parts[0].text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        144,
+        0
+      ],
+      "id": "26db437a-360a-4aef-860b-ac64d61a6a5c",
+      "name": "Photo input"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "425636ea-6092-44f7-9bbf-2a12516efdbd",
+              "name": "=raw_text",
+              "value": "={{ $json.content.parts.toJsonString() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        144,
+        192
+      ],
+      "id": "2960a1d9-321f-4eda-8111-2465374c791c",
+      "name": "Voice input"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=information:{{ $json.raw_text }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "IMPORTANT: Output must be RAW JSON ARRAY only. Do NOT use markdown code blocks (```json). Do NOT add explanations. Start with \"[\" and end with \"]\".\n\nYou are DompetAI, a STRICT and deterministic financial parser.\nYour job is to parse text into a JSON ARRAY based on the user's intent:\n1. RECORDING a transaction (buying/selling).\n2. REQUESTING a report (graphs/stats).\n\nCURRENT CONTEXT:\n- TODAY'S DATE: {{ $now.format('DD/MM/YYYY') }} \n- YESTERDAY: {{ $now.minus(1, 'days').format('DD/MM/YYYY') }}\n--------------------------------------------------\nMODE 1: IF USER RECORDS TRANSACTION\n(e.g., \"Beli bakso 15rb\", \"Gaji masuk 5jt\")\n--------------------------------------------------\nReturn JSON objects with \"action\": \"transaction\". Structure:\n{\n  \"action\": \"transaction\",     // STATIC VALUE\n\"tanggal\": \"DD/MM/YYYY\", // Date. If user implies today/now, leave it EMPTY string (\"\") or null.\n  \"tipe\": \"Pemasukan\" | \"Pengeluaran\",\n  \"kategori\": string,          // See Auto-Categorization rules.\n  \"item\": string,              // Item name.\n  \"nominal\": number,           // Integer only.\n  \"metode\": \"Cash\" | \"Transfer\" | \"E-Wallet\"\n}\n\n--------------------------------------------------\nMODE 2: IF USER ASKS FOR REPORT/GRAPH\n(e.g., \"Grafik bulan ini\", \"Laporan Agustus 2023\", \"Pengeluaran tahun lalu\")\n--------------------------------------------------\nReturn a JSON object with \"action\": \"report\". Structure:\n{\n  \"action\": \"report\",\n  \"period\": \"daily\" | \"weekly\" | \"monthly\" | \"yearly\",\n  \"specific_month\": number (optional), // 1 for Jan, 12 for Dec\n  \"specific_year\": number (optional),  // e.g. 2023, 2024\n  \"specific_date\": number (optional)   // 1-31 (For specific daily report)\n}\n\nRULES FOR REPORT PERIOD:\n- \"Hari ini\" -> period: \"daily\"\n- \"Minggu ini\" -> period: \"weekly\"\n- \"Bulan ini\" -> period: \"monthly\"\n- \"Tahun ini\" -> period: \"yearly\"\n- \"Laporan Agustus\" -> period: \"monthly\", specific_month: 8\n- \"Laporan Mei 2023\" -> period: \"monthly\", specific_month: 5, specific_year: 2023\n- \"Laporan Tahun 2022\" -> period: \"yearly\", specific_year: 2022\n- \"Laporan tgl 20\" -> period: \"daily\", specific_date: 20\n\n--------------------------------------------------\nHARD RULES (For Transactions):\n1. **Nominal Parsing**: \"rb\"/\"ribu\"/\"k\" -> *1000. \"jt\"/\"juta\" -> *1000000. Output INTEGER.\n2. **Date Resolution**: \"Hari ini\" -> TODAY. \"Kemarin\" -> YESTERDAY.\n3. **Auto-Categorization**:\n   - **Tipe**: \"Pemasukan\" (gaji, terima), \"Pengeluaran\" (beli, bayar).\n   - **Kategori**: Makanan, Transport, Tagihan, Belanja, Lainnya.\n   - **Metode**: E-Wallet (QRIS, Gopay), Transfer (BCA, TF), Cash.\n4. **Handling OCR**: Combine Merchant + Item (e.g., \"Roti (Indomaret)\").\n5. **Split Entries**: \"Beli bakso 15rb dan es teh 5rb\" -> Two Objects.\n\n--------------------------------------------------\nEXAMPLES:\n\nInput: \"Beli nasi goreng 15rb\"\nOutput:\n[\n  {\"action\": \"transaction\", \"tanggal\": \"{{ $now.format('DD/MM/YYYY') }}\", \"tipe\": \"Pengeluaran\", \"kategori\": \"Makanan\", \"item\": \"Nasi Goreng\", \"nominal\": 15000, \"metode\": \"Cash\"}\n]\n\nInput: \"Coba buatkan grafik pengeluaran bulan ini\"\nOutput:\n[\n  {\"action\": \"report\", \"period\": \"monthly\"}\n]\n\nInput: \"Saya mau lihat laporan keuangan Mei 2023\"\nOutput:\n[\n  {\"action\": \"report\", \"period\": \"monthly\", \"specific_month\": 5, \"specific_year\": 2023}\n]\n\nInput: \"Grafik tahun 2022 dong\"\nOutput:\n[\n  {\"action\": \"report\", \"period\": \"yearly\", \"specific_year\": 2022}\n]\n\nInput: \"Pengeluaran tanggal 25 kemarin\"\nOutput:\n[\n  {\"action\": \"report\", \"period\": \"daily\", \"specific_date\": 25}\n]\n\nInput: \"Halo apa kabar\"\nOutput:\n[]"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        368,
+        0
+      ],
+      "id": "5f0ac420-67e6-41c1-bbd7-13250cb75cd8",
+      "name": "AI Agent",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        368,
+        224
+      ],
+      "id": "f6d8579d-2713-4252-8fbf-2e69657628c9",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "Y1AeqS88BWsXHoZ8",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "operation": "analyze",
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "text": "Analisis gambar ini (struk belanja/bukti transfer) untuk mengekstrak data transaksi keuangan.\nBerikan output berupa ringkasan data dalam Bahasa Indonesia dengan format berikut:\n\n1. TANGGAL: (Cari tanggal transaksi, format DD/MM/YYYY)\n2. MERCHANT: (Nama Toko/Penerima Transfer)\n3. METODE: (Cari indikasi Cash, Debit, QRIS, atau Transfer. Jika tidak ada, tulis \"Cash\")\n4. RINCIAN ITEM:\n   - [Nama Barang 1] seharga [Harga 1]\n   - [Nama Barang 2] seharga [Harga 2]\n5. TOTAL AKHIR: (Total nominal yang dibayarkan)\n\nCATATAN PENTING:\n- Jika gambar adalah bukti transfer, \"Item\" adalah tujuan transfer (misal: \"Transfer ke Budi\").\n- Abaikan pajak (PPN) atau biaya admin jika memungkinkan, fokus ke harga item.\n- Jika detail item buram/tidak terbaca, ambil \"Total Akhir\" saja.",
+        "inputType": "binary",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        -80,
+        0
+      ],
+      "id": "412beb18-4cf9-43ae-89cb-f11559585e41",
+      "name": "Baca Photo",
+      "retryOnFail": true,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "Y1AeqS88BWsXHoZ8",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "inputType": "binary",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        -80,
+        192
+      ],
+      "id": "9ecbaf55-52ef-4848-85d0-ae4791e73196",
+      "name": "Baca Voice",
+      "retryOnFail": true,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "Y1AeqS88BWsXHoZ8",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.action }}",
+                    "rightValue": "transaction",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "6727b7f4-6fc1-4d16-b1cf-57b65256ac6c"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Transaksi"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "d833ea20-ed10-4eea-bedd-f12555cb2ef3",
+                    "leftValue": "={{ $json.action }}",
+                    "rightValue": "report",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Laporan"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "41061a78-246f-4b58-9517-976251c9c8ed",
+                    "leftValue": "={{ $json.action }}",
+                    "rightValue": "kosong",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Tidak Dimengerti"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        944,
+        -16
+      ],
+      "id": "168d2878-8cfe-4f58-8b90-c992e1d072f5",
+      "name": "Deteksi Tujuan"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "da954898-be0f-48c5-8f6d-e6bdcfa4d629",
+              "name": "=Tanggal",
+              "value": "={{ $json.tanggal }}",
+              "type": "string"
+            },
+            {
+              "id": "7e8b0afa-cf03-414d-814a-6942f7b206df",
+              "name": "=Tipe",
+              "value": "={{ $json.tipe }}",
+              "type": "string"
+            },
+            {
+              "id": "4a625df3-e3b4-4dd1-a1d0-7fcbb62e9bea",
+              "name": "=Kategori",
+              "value": "={{ $json.kategori }}",
+              "type": "string"
+            },
+            {
+              "id": "f856ef2b-a6d6-4bd8-a4ba-8197ac390d20",
+              "name": "=Item",
+              "value": "={{ $json.item }}",
+              "type": "string"
+            },
+            {
+              "id": "ef8d8ff3-0835-4912-a5bc-47d979409c9f",
+              "name": "Nominal (Rp)",
+              "value": "={{ $json.nominal }}",
+              "type": "string"
+            },
+            {
+              "id": "ba7ba425-2ce9-4152-a9bc-dfecd9fb40c4",
+              "name": "=Metode",
+              "value": "={{ $json.metode }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1168,
+        -96
+      ],
+      "id": "be399b39-1393-44f2-9649-b17dcfe49521",
+      "name": "Mapping Json"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1DOHNy8-5Gdicm0h5c3MCYmfVUjgv6jQs3EHIlBxIAmI",
+          "mode": "list",
+          "cachedResultName": "Database_DompetAI",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1DOHNy8-5Gdicm0h5c3MCYmfVUjgv6jQs3EHIlBxIAmI/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1DOHNy8-5Gdicm0h5c3MCYmfVUjgv6jQs3EHIlBxIAmI/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Tanggal",
+              "displayName": "Tanggal",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Tipe",
+              "displayName": "Tipe",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Kategori",
+              "displayName": "Kategori",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Item",
+              "displayName": "Item",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Nominal (Rp)",
+              "displayName": "Nominal (Rp)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Metode",
+              "displayName": "Metode",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "cellFormat": "RAW"
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1392,
+        -96
+      ],
+      "id": "7989db7b-b4f7-475d-851b-dbcbacfdcd09",
+      "name": "Masukin ke Sheet",
+      "retryOnFail": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "kMgUOaiVt89vFiLy",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Dari Telegram').item.json.message.chat.id }}",
+        "text": "={{\n(() => {\n  const items = $input.all();\n  const arr = items.map(i => i.json).filter(Boolean);\n\n  // 1. FUNGSI PENTING: Escape karakter aneh HANYA pada data user (bukan pada template)\n  const escapeMd = (str) => {\n    return (str || '').toString().replace(/[_*[\\]()~`>#+\\-=|{}.!]/g, '\\\\$&');\n  };\n\n  // 2. Format Rupiah (Titik pada angka juga harus di-escape di Telegram V2)\n  const formatRupiah = (angka) => {\n    return new Intl.NumberFormat('id-ID').format(angka || 0).replace(/\\./g, '\\\\.');\n  };\n\n  let totalMasuk = 0;\n  let totalKeluar = 0;\n\n  // 3. Loop Data\n  const lines = arr.map(e => {\n    // Kita escape variabel item & kategori agar simbol user tidak merusak format\n    const item = escapeMd(e.Item || e.item || 'Item');\n    const kategori = escapeMd(e.Kategori || e.kategori || 'Lainnya');\n    \n    const rawNominal = e['Nominal (Rp)'] || e.Nominal || e.nominal;\n    const nominal = parseInt(rawNominal) || 0;\n    \n    const tipe = (e.Tipe || e.tipe || 'Pengeluaran').toString().toLowerCase();\n    \n    // Logic Tambah/Kurang\n    if (tipe.includes('pemasukan')) {\n      totalMasuk += nominal;\n      // Perhatikan: Tanda kurung () di-escape manual jadi \\\\( \\\\)\n      return `💰 *${item}* \\\\(${kategori}\\\\)\\n   Rp ${formatRupiah(nominal)}`;\n    } else {\n      totalKeluar += nominal;\n      return `💸 *${item}* \\\\(${kategori}\\\\)\\n   Rp ${formatRupiah(nominal)}`;\n    }\n  });\n\n  // 4. Susun Summary\n  let summary = '';\n  if (totalMasuk > 0) summary += `Total Masuk: *Rp ${formatRupiah(totalMasuk)}*\\n`;\n  if (totalKeluar > 0) summary += `Total Keluar: *Rp ${formatRupiah(totalKeluar)}*\\n`;\n  \n  // Tanggal juga harus di-escape isinya\n  const tgl = escapeMd(arr[0]?.Tanggal || 'Hari ini');\n\n  // 5. Pesan Akhir (Gunakan format manual yang benar)\n  // Tanda seru (!) dan dash (-) pada template tulisan biasa harus di-escape manual\n  const text = \n    `✅ *Transaksi Berhasil Dicatat\\\\!*\\n` + \n    `📅 ${tgl}\\n\\n` +\n    (lines.length ? lines.join('\\n\\n') : '_(Tidak ada data)_') +\n    `\\n\\n` +\n    `\\\\-\\\\-\\\\-\\\\-\\\\-\\\\-\\\\-\\\\-\\\\-\\\\-\\\\-\\\\-\\\\-\\\\-\\\\-\\\\-\\\\-\\\\-\\\\-\\n` +\n    summary +\n    `_Data sudah masuk ke Google Sheets_ 📊`;\n\n  return text; \n})()\n}}",
+        "additionalFields": {
+          "parse_mode": "MarkdownV2"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1840,
+        -96
+      ],
+      "id": "571ba441-8885-4995-90f6-dbec0713dd33",
+      "name": "Kirim Laporan",
+      "webhookId": "c280e1eb-3636-4381-99b7-081bb4170448",
+      "executeOnce": true,
+      "retryOnFail": true,
+      "credentials": {
+        "telegramApi": {
+          "id": "jwqs0eboHV0Bbqza",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendPhoto",
+        "chatId": "={{ $('Dari Telegram').first().json.message.chat.id }}",
+        "binaryData": true,
+        "additionalFields": {
+          "caption": "={{ $('Ambil Data Buat Grafik').item.json.caption }}",
+          "parse_mode": "Markdown"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1840,
+        96
+      ],
+      "id": "76e4a8a1-f397-416b-9266-3b682b2c45ad",
+      "name": "Kirim Laporan1",
+      "webhookId": "2446fcea-7770-4350-858d-abac27d00cec",
+      "retryOnFail": true,
+      "executeOnce": true,
+      "credentials": {
+        "telegramApi": {
+          "id": "jwqs0eboHV0Bbqza",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1DOHNy8-5Gdicm0h5c3MCYmfVUjgv6jQs3EHIlBxIAmI",
+          "mode": "list",
+          "cachedResultName": "Database_DompetAI",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1DOHNy8-5Gdicm0h5c3MCYmfVUjgv6jQs3EHIlBxIAmI/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1DOHNy8-5Gdicm0h5c3MCYmfVUjgv6jQs3EHIlBxIAmI/edit#gid=0"
+        },
+        "options": {
+          "dataLocationOnSheet": {
+            "values": {
+              "rangeDefinition": "specifyRange"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1168,
+        96
+      ],
+      "id": "8beae2ac-f252-44f2-b3d4-26b718b10435",
+      "name": "Baca Sheet",
+      "retryOnFail": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "kMgUOaiVt89vFiLy",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// ==========================================\n// KONFIGURASI\n// ==========================================\n// Set ke 'false' agar filter bulan/tanggal berfungsi!\nconst FORCE_ALL_DATA = false; \n\n// ==========================================\n// 1. AMBIL DATA DARI NODE SEBELUMNYA\n// ==========================================\n// Mengambil semua data yang masuk ke node ini\nconst items = $input.all();\nconst allTransactions = items.length > 0 ? items.map(i => i.json) : [];\n\n// Ambil parameter filter dari node Agent/Switch\nlet filterPeriod = 'monthly'; // Default\nlet targetMonth = null;\nlet targetYear = null;\nlet targetDate = null;\n\ntry {\n  // Coba ambil dari Switch atau input text raw (Fallback logic)\n  let sourceNode = $('Deteksi Tujuan').first().json;\n  if (!sourceNode || !sourceNode.action) {\n    // Jika tidak ada di switch, coba cek node input text\n    const prevNode = $('Cleaning Json').first();\n    if (prevNode) sourceNode = prevNode.json;\n  }\n  \n  if (sourceNode) {\n    if (sourceNode.period) filterPeriod = sourceNode.period;\n    if (sourceNode.specific_month) targetMonth = parseInt(sourceNode.specific_month);\n    if (sourceNode.specific_year) targetYear = parseInt(sourceNode.specific_year);\n    if (sourceNode.specific_date) targetDate = parseInt(sourceNode.specific_date);\n  }\n} catch (e) {\n  // Fallback jika error baca param, lanjut pakai default\n}\n\n// ==========================================\n// 2. SETUP WAKTU (WIB / UTC+7)\n// ==========================================\nconst getWIBDate = () => {\n  const d = new Date();\n  const utc = d.getTime() + (d.getTimezoneOffset() * 60000);\n  return new Date(utc + (3600000 * 7));\n};\n\nconst now = getWIBDate();\n// Logika penentuan target waktu\nconst currentYear = (targetYear !== null && !isNaN(targetYear)) ? targetYear : now.getFullYear();\nconst currentMonth = (targetMonth !== null && !isNaN(targetMonth)) ? (targetMonth - 1) : now.getMonth();\nconst currentDate = (targetDate !== null) ? targetDate : now.getDate();\n\nconst monthNames = [\"Januari\", \"Februari\", \"Maret\", \"April\", \"Mei\", \"Juni\", \"Juli\", \"Agustus\", \"September\", \"Oktober\", \"November\", \"Desember\"];\n\n// Label Judul Laporan\nlet periodLabel = \"\";\nif (FORCE_ALL_DATA) {\n    periodLabel = \"Semua Riwayat Transaksi\";\n} else if (filterPeriod === 'daily') {\n    periodLabel = `${currentDate} ${monthNames[currentMonth]} ${currentYear}`;\n} else if (filterPeriod === 'weekly') {\n    periodLabel = \"7 Hari Terakhir\";\n} else if (filterPeriod === 'yearly') {\n    periodLabel = `Tahun ${currentYear}`;\n} else {\n    periodLabel = `${monthNames[currentMonth]} ${currentYear}`;\n}\n\n// ==========================================\n// 3. FUNGSI PARSING TANGGAL (FIXED)\n// ==========================================\nconst parseDate = (raw) => {\n  if (!raw) return null;\n  \n  // Jika format angka serial Excel/Google Sheets (misal: 45000)\n  if (typeof raw === 'number') {\n    return new Date(Math.round((raw - 25569) * 86400 * 1000));\n  }\n  \n  const str = raw.toString().trim();\n  \n  // Cek format DD/MM/YYYY (Sesuai data kamu: 23/05/2025)\n  // Perbaikan regex: Menggunakan \\d bukan \\\\d di dalam /.../\n  const matchSlash = str.match(/^(\\d{1,2})\\/(\\d{1,2})\\/(\\d{4})/);\n  if (matchSlash) return new Date(matchSlash[3], matchSlash[2] - 1, matchSlash[1]);\n  \n  // Cek format YYYY-MM-DD (Standar ISO)\n  const matchDash = str.match(/^(\\d{4})-(\\d{1,2})-(\\d{1,2})/);\n  if (matchDash) return new Date(matchDash[1], matchDash[2] - 1, matchDash[3]);\n\n  // Fallback parsing standar JS\n  const fallback = new Date(str);\n  return isNaN(fallback.getTime()) ? null : fallback;\n};\n\n// ==========================================\n// 4. LOGIKA FILTER & HITUNG\n// ==========================================\nlet totalPemasukan = 0;\nlet totalPengeluaran = 0;\n\nallTransactions.forEach((t, index) => {\n  // Ambil tanggal (handle berbagai kemungkinan nama kolom)\n  const tglRaw = t.Tanggal || t.tanggal || t.Date || t.date; \n  const tDate = parseDate(tglRaw);\n  \n  let isMatch = false;\n\n  if (FORCE_ALL_DATA) {\n    isMatch = true;\n  } else if (tDate) {\n    const tY = tDate.getFullYear();\n    const tM = tDate.getMonth();\n    const tD = tDate.getDate();\n\nconst nowDate = new Date(currentYear, currentMonth, currentDate);\nconst oneDayMS = 24 * 60 * 60 * 1000;\n\nif (filterPeriod === 'monthly') {\n    isMatch = (tY === currentYear && tM === currentMonth);\n} \nelse if (filterPeriod === 'yearly') {\n    isMatch = (tY === currentYear);\n} \nelse if (filterPeriod === 'daily') {\n    isMatch = (tY === currentYear && tM === currentMonth && tD === currentDate);\n} \nelse if (filterPeriod === 'weekly') {\n    const diffTime = nowDate - tDate;  \n    const diffDays = diffTime / oneDayMS;\n    isMatch = diffDays >= 0 && diffDays <= 6;   // 7 hari terakhir\n}\n\n  }\n\n  if (isMatch) {\n    // --- AMBIL NOMINAL ---\n    // Cek kolom: \"Nominal (Rp)\", \"# Nominal (Rp)\" (biasanya dari Excel), atau \"nominal\"\n    let valStr = (t['Nominal (Rp)'] || t['# Nominal (Rp)'] || t.Nominal || t.nominal || '0').toString();\n    valStr = valStr.replace(/[^0-9]/g, ''); // Hapus Rp, titik, koma\n    const nominal = parseInt(valStr) || 0;\n\n    // --- CEK TIPE ---\n    const tipeRaw = (t.Tipe || t.tipe || '').toString().toLowerCase().trim();\n    \n    // Logic deteksi Pemasukan\n    if (tipeRaw.includes('masuk') || tipeRaw.includes('income')) {\n      totalPemasukan += nominal;\n    } else {\n      // Default ke Pengeluaran jika tidak ada kata 'masuk'\n      totalPengeluaran += nominal;\n    }\n  }\n});\n\nconst sisaSaldo = totalPemasukan - totalPengeluaran;\nconst formatRp = (n) => new Intl.NumberFormat('id-ID').format(n);\n\n// ==========================================\n// 5. OUTPUT (RETURN OBJECT)\n// ==========================================\n\n// Chart Config\nconst chartConfig = {\n  type: 'doughnut',\n  data: {\n    labels: ['Masuk', 'Keluar'],\n    datasets: [{\n      data: [totalPemasukan, totalPengeluaran],\n      backgroundColor: ['#2ecc71', '#e74c3c'], \n      borderWidth: 0\n    }]\n  },\n  options: {\n    title: { display: true, text: periodLabel, fontSize: 18, fontColor: '#333' },\n    plugins: {\n      datalabels: {\n        display: true,\n        color: 'white',\n        font: { weight: 'bold', size: 14 },\n        formatter: (val) => {\n            if(val === 0) return '';\n            return val >= 1000000 ? (val/1000000).toFixed(1) + 'jt' : (val/1000).toFixed(0) + 'k';\n        }\n      },\n      doughnutlabel: {\n        labels: [\n            { text: 'Net', font: { size: 12 } }, \n            { text: (sisaSaldo/1000).toFixed(0) + 'k', font: { size: 20, weight: 'bold' } }\n        ]\n      }\n    }\n  }\n};\n\nconst chartUrl = `https://quickchart.io/chart?c=${encodeURIComponent(JSON.stringify(chartConfig))}&width=500&height=300&backgroundColor=white`;\n\n// Caption Pesan\nconst caption = \n  `📊 *Laporan Keuangan*\\n` +\n  `🗓 Periode: ${periodLabel}\\n\\n` +\n  `💰 Masuk: Rp ${formatRp(totalPemasukan)}\\n` +\n  `💸 Keluar: Rp ${formatRp(totalPengeluaran)}\\n` +\n  `-------------------\\n` +\n  `✅ Sisa: *Rp ${formatRp(sisaSaldo)}*`;\n\n// RETURN WAJIB DI N8N\nreturn [\n  {\n    json: {\n      chartUrl: chartUrl,\n      caption: caption,\n      debug: {\n          period: periodLabel,\n          totalData: allTransactions.length,\n          masuk: totalPemasukan,\n          keluar: totalPengeluaran\n      }\n    }\n  }\n];   // penutup array return\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1392,
+        96
+      ],
+      "id": "7db65882-d11a-4252-9314-969f2bc5dd67",
+      "name": "Ambil Data Buat Grafik",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.chartUrl }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1616,
+        96
+      ],
+      "id": "ec93f1bd-f5e2-45bf-9a59-d93616fca477",
+      "name": "Requenst Grafik",
+      "retryOnFail": false
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Dari Telegram').item.json.message.chat.id }}",
+        "text": "=Hey {{ $('Dari Telegram').item.json.message.chat.first_name }}!! Aku ramudheng inputan iki!!",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -304,
+        384
+      ],
+      "id": "3be21945-443c-475a-aadb-802ff637de22",
+      "name": "Kirim Error",
+      "webhookId": "45d479ec-8074-484a-9781-5b4103020917",
+      "executeOnce": true,
+      "retryOnFail": true,
+      "credentials": {
+        "telegramApi": {
+          "id": "jwqs0eboHV0Bbqza",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Dari Telegram').item.json.message.chat.id }}",
+        "text": "=Hey {{ $('Dari Telegram').item.json.message.from.first_name }}!! Aku ra Mudeng karep mu!!",
+        "replyMarkup": "=none",
+        "forceReply": {},
+        "replyKeyboardOptions": {},
+        "replyKeyboardRemove": {},
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1840,
+        272
+      ],
+      "id": "eb73fc12-7757-4183-95c9-71c813862d38",
+      "name": "Kirim Error1",
+      "webhookId": "c26cbfef-2530-4868-a89f-9a3d29ab9642",
+      "alwaysOutputData": false,
+      "retryOnFail": true,
+      "executeOnce": true,
+      "credentials": {
+        "telegramApi": {
+          "id": "jwqs0eboHV0Bbqza",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const aiOutputText = $input.first().json.output;\nlet cleanData = [];\n\ntry {\n  // 1. Ekstrak JSON Array dari teks AI\n  const jsonMatch = aiOutputText.match(/\\[[\\s\\S]*\\]/);\n  if (jsonMatch) {\n    cleanData = JSON.parse(jsonMatch[0]);\n  } else {\n    // Coba parsing langsung jika tidak ada kurung siku\n    cleanData = JSON.parse(aiOutputText);\n  }\n} catch (error) {\n  console.log(\"Error parsing:\", error);\n  return [{ json: { action: \"kosong\" } }];\n}\n\nif (!cleanData || cleanData.length === 0) {\n  return [{ json: { action: \"kosong\" } }];\n}\n\n// 2. Siapkan Tanggal Hari Ini (Format DD/MM/YYYY)\nconst now = new Date();\nconst dd = String(now.getDate()).padStart(2, '0');\nconst mm = String(now.getMonth() + 1).padStart(2, '0'); // Januari = 0\nconst yyyy = now.getFullYear();\nconst todayFormatted = `${dd}/${mm}/${yyyy}`;\n\n// 3. Perbaiki Data (Looping)\nreturn cleanData.map(item => {\n  // Cek apakah tanggal kosong, null, atau berisi kode n8n yang salah\n  const tgl = item.tanggal;\n  const isInvalid = !tgl || tgl === '' || tgl.includes('$now') || tgl.includes('{{');\n  \n  if (isInvalid) {\n    // TIMPA dengan tanggal hari ini yang sudah dihitung oleh Javascript\n    item.tanggal = todayFormatted;\n  }\n  \n  // Pastikan format nominal integer bersih\n  item.nominal = parseInt(item.nominal) || 0;\n\n  return { json: item };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        720,
+        0
+      ],
+      "id": "f292a6f2-9e5c-451e-afc7-dda9c3a9c728",
+      "name": "Cleaning Json"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Dari Telegram": {
+      "main": [
+        [
+          {
+            "node": "Deteksi Tipe Pesan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Deteksi Tipe Pesan": {
+      "main": [
+        [
+          {
+            "node": "Text input",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Ambil Photo",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Ambil Voice",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Kirim Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ambil Photo": {
+      "main": [
+        [
+          {
+            "node": "Baca Photo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ambil Voice": {
+      "main": [
+        [
+          {
+            "node": "Baca Voice",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Photo input": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Text input": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Voice input": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Cleaning Json",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Baca Photo": {
+      "main": [
+        [
+          {
+            "node": "Photo input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Baca Voice": {
+      "main": [
+        [
+          {
+            "node": "Voice input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Deteksi Tujuan": {
+      "main": [
+        [
+          {
+            "node": "Mapping Json",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Baca Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Kirim Error1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mapping Json": {
+      "main": [
+        [
+          {
+            "node": "Masukin ke Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Masukin ke Sheet": {
+      "main": [
+        [
+          {
+            "node": "Kirim Laporan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Baca Sheet": {
+      "main": [
+        [
+          {
+            "node": "Ambil Data Buat Grafik",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ambil Data Buat Grafik": {
+      "main": [
+        [
+          {
+            "node": "Requenst Grafik",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Requenst Grafik": {
+      "main": [
+        [
+          {
+            "node": "Kirim Laporan1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Kirim Error1": {
+      "main": [
+        []
+      ]
+    },
+    "Cleaning Json": {
+      "main": [
+        [
+          {
+            "node": "Deteksi Tujuan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "9cb9a648-aca1-4dfc-86a7-cb993b20877b",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "ffa1bef253ec6f45cc96ffd8595ce9e7a9f14382907b185d782549c65483462b"
+  },
+  "id": "gVqBn4mkjnXNMeOa",
+  "tags": []
+}

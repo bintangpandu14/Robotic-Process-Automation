@@ -1,0 +1,1508 @@
+{
+  "name": "FIXED_Quality_Check",
+  "nodes": [
+    {
+      "parameters": {
+        "chatId": "1286218624",
+        "text": "=🚨 *QC ALERT — TICKET CREATED* 🚨\n\n*🆔 Ticket ID:* {{ $('field_tiketing').item.json.ticket_id }}\n*📦 Batch:* {{ $('field_tiketing').item.json['Batch Number'] }}\n\n*❌ Parameter Gagal:*\n{{ $('field_tiketing').item.json['Parameter Gagal'] }}\n\n---\n\n*🔥 Severity:* {{ $('field_tiketing').item.json.Severity }}\n*⏳ SLA Deadline:* {{ $('field_tiketing').item.json.Sla_Deadline }}\n*📊 Escalation Level:* {{ $('field_tiketing').item.json.Escalation_Level }}\n*⌚ Is Overdue:* {{ $('field_tiketing').item.json.Is_sla_Overdue }}\n---\n\n*👥 Assigned To:*\n{{ $('field_tiketing').item.json['Assigned (To)'] }}\n\n*📧 PIC Email:*\n{{ $('field_tiketing').item.json.Pic_Email }}\n\n*⏱ Assigned At:* {{ $('field_tiketing').item.json.Assigned_at }}\n*📅 Created At:* {{ $('field_tiketing').item.json.ticket_created_at }}\n\n---\n\n🔗 *QR Code:*\n{{ $('field_tiketing').item.json.QR_Code_Url }}\n",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2112,
+        768
+      ],
+      "id": "dad8e184-a2a5-470f-8c4e-6b4dde7b78c1",
+      "name": "Send a text message",
+      "webhookId": "ed946ca3-45da-4c4e-a0aa-83f114668b44",
+      "credentials": {
+        "telegramApi": {
+          "id": "PuYpHGdWEDT6HpKM",
+          "name": "Telegram account 4"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.Pic_Email }}",
+        "subject": "=New QC Ticket: {{ $json.ticket_id }}",
+        "message": "=Ticket created and assigned to your division.<br>\n<br>\n<b>Severity:</b> {{ $json.Severity }}<br>\n<b>Parameter Failed:</b> {{ $json['Parameter Gagal'] }}<br>\n<b>SLA Deadline:</b> {{ $json.Sla_Deadline }}<br>\n<br>\n<b>QR Code Link:</b> <a href=\"{{ $json.QR_Code_Url }}\">Click here to open QR</a><br>\n<br>\n<hr>\nTo close this ticket, reply this email with the following format:<br>\n<br>\n<b>Root Cause:</b> &lt;your explanation&gt;<br>\n<b>Corrective Action:</b> &lt;your action&gt;<br>\n<b>Closed By:</b> &lt;your name&gt;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1888,
+        768
+      ],
+      "id": "49b46fb0-68ce-4d61-a98d-3dd5d468e786",
+      "name": "Send a message",
+      "webhookId": "6cd99935-f494-4158-94f9-55668cac5e3b",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "cNpmDpqmn1srpsya",
+          "name": "Gmail account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "filters": {}
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        2224,
+        544
+      ],
+      "id": "f6a6be91-6fb8-4ebd-9d61-3d58b1d656e6",
+      "name": "Gmail Trigger",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "cNpmDpqmn1srpsya",
+          "name": "Gmail account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1A4sjFOCGjOE6DFhr8h8M9AdOxpCytYBBHY-y8ardJcY",
+          "mode": "list",
+          "cachedResultName": "C Quality Control  (Jawaban)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1A4sjFOCGjOE6DFhr8h8M9AdOxpCytYBBHY-y8ardJcY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 944630553,
+          "mode": "list",
+          "cachedResultName": "QC_Tiketing",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1A4sjFOCGjOE6DFhr8h8M9AdOxpCytYBBHY-y8ardJcY/edit#gid=944630553"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [
+            "ticket_id"
+          ],
+          "schema": [
+            {
+              "id": "ticket_id",
+              "displayName": "ticket_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Batch Number",
+              "displayName": "Batch Number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Parameter Gagal",
+              "displayName": "Parameter Gagal",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Waktu QC",
+              "displayName": "Waktu QC",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ticket_created_at",
+              "displayName": "ticket_created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Severity",
+              "displayName": "Severity",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Assigned (To)",
+              "displayName": "Assigned (To)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Sla_Deadline",
+              "displayName": "Sla_Deadline",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "QR_Code_Url",
+              "displayName": "QR_Code_Url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ticket_status",
+              "displayName": "ticket_status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Is_sla_Overdue",
+              "displayName": "Is_sla_Overdue",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Escalation_Level",
+              "displayName": "Escalation_Level",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Pic_Email",
+              "displayName": "Pic_Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Assigned_at",
+              "displayName": "Assigned_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Closed_at",
+              "displayName": "Closed_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Root_Cause",
+              "displayName": "Root_Cause",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Corrective_Action",
+              "displayName": "Corrective_Action",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Assigned (To) Email",
+              "displayName": "Assigned (To) Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2896,
+        544
+      ],
+      "id": "9e21be60-049f-4533-9372-e8e17058da6c",
+      "name": "Update row in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "f6iwrB7cZ5zJgCWL",
+          "name": "Google Sheets account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "1286218624",
+        "text": "=✅ *QC TICKET CLOSED*\n\n🆔 Ticket ID: {{$node[\"Code1\"].json[\"TicketID\"]}}\n✔ Status: {{$node[\"Code1\"].json[\"Status\"]}}\n👤 Closed By: {{ $json[\"Assigned (To) Email\"] }}\n🕒 Closed At: {{$node[\"Code1\"].json[\"Closed_at\"]}}\n\n🔍 Root Cause:\n{{$node[\"Code1\"].json[\"Root_Cause\"]}}\n\n🔧 Corrective Action:\n{{$node[\"Code1\"].json[\"Corrective_Action\"]}}\n",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        3120,
+        544
+      ],
+      "id": "b1072d91-5d0c-4764-a6d5-a95f2ce1bae7",
+      "name": "Send a text message1",
+      "webhookId": "ed946ca3-45da-4c4e-a0aa-83f114668b44",
+      "credentials": {
+        "telegramApi": {
+          "id": "PuYpHGdWEDT6HpKM",
+          "name": "Telegram account 4"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Ambil data email pertama\nconst email = items[0].json;\n\n// ============================================\n// 1. AMBIL TICKET ID DARI SUBJECT\n// ============================================\n// Contoh Subject: \"New QC Ticket: TKT-056179-4262\"\nconst subject = email.Subject || \"\";\n\n// Regex cari \"TKT-\" diikuti angka/huruf/strip\nconst ticketIdMatch = subject.match(/TKT-[\\w\\d-]+/);\nconst ticketID = ticketIdMatch ? ticketIdMatch[0] : null;\n\n// ============================================\n// 2. AMBIL ISI LAPORAN DARI SNIPPET\n// ============================================\n// Contoh Snippet: \"Root Cause: Sensor pH kotor Corrective Action: ... Closed By: Myname --- ...\"\nlet snippet = email.snippet || \"\";\n\n// Bersihkan simbol HTML entitas (misal &amp; jadi &)\nsnippet = snippet.replace(/&amp;/g, \"&\").replace(/&lt;/g, \"<\").replace(/&gt;/g, \">\");\n\n// Regex untuk mengambil data di antara kata kunci\n// A. Root Cause: Ambil teks antara \"Root Cause:\" DAN \"Corrective Action:\"\nconst rootCauseMatch = snippet.match(/Root Cause:\\s*(.+?)\\s*Corrective Action:/i);\n\n// B. Corrective Action: Ambil teks antara \"Corrective Action:\" DAN \"Closed By:\"\nconst correctiveMatch = snippet.match(/Corrective Action:\\s*(.+?)\\s*Closed By:/i);\n\n// C. Closed By: Ambil teks setelah \"Closed By:\" sampai ketemu tanda \"---\" atau akhir kalimat\nconst closedByMatch = snippet.match(/Closed By:\\s*(.+?)(\\s*---|(?=$))/i);\n\n// ============================================\n// 3. OUTPUT FINAL\n// ============================================\nreturn [{\n  json: {\n    ticket_id: ticketID, // ID dari Subject\n    ticket_status: \"Closed\",\n    Closed_at: new Date().toISOString(),\n    \n    // Ambil hasil regex grup ke-1, lalu trim spasi\n    Root_Cause: rootCauseMatch ? rootCauseMatch[1].trim() : \"N/A\",\n    Corrective_Action: correctiveMatch ? correctiveMatch[1].trim() : \"N/A\",\n    \n    // Closed By dari snippet, atau fallback ke pengirim email\n    \"Assigned (To) Email\": closedByMatch ? closedByMatch[1].trim() : (email.From || \"Unknown\")\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2448,
+        544
+      ],
+      "id": "b7eb92b5-44e7-4cbd-a701-6da11f6e7de6",
+      "name": "Code1"
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "1A4sjFOCGjOE6DFhr8h8M9AdOxpCytYBBHY-y8ardJcY",
+          "mode": "list",
+          "cachedResultName": "C Quality Control  (Jawaban)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1A4sjFOCGjOE6DFhr8h8M9AdOxpCytYBBHY-y8ardJcY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1563551034,
+          "mode": "list",
+          "cachedResultName": "QC_Respons",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1A4sjFOCGjOE6DFhr8h8M9AdOxpCytYBBHY-y8ardJcY/edit#gid=1563551034"
+        },
+        "event": "rowAdded",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        320,
+        576
+      ],
+      "id": "18ccfcc6-934a-4472-bac9-b50298515dba",
+      "name": "baca_response_form",
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "8YgmZX6lW3PNQilf",
+          "name": "Google Sheets Trigger account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1A4sjFOCGjOE6DFhr8h8M9AdOxpCytYBBHY-y8ardJcY",
+          "mode": "list",
+          "cachedResultName": "C Quality Control  (Jawaban)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1A4sjFOCGjOE6DFhr8h8M9AdOxpCytYBBHY-y8ardJcY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1377337295,
+          "mode": "list",
+          "cachedResultName": "Threshold",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1A4sjFOCGjOE6DFhr8h8M9AdOxpCytYBBHY-y8ardJcY/edit#gid=1377337295"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        544,
+        576
+      ],
+      "id": "fcceaafb-3df2-44fb-a103-f4d5a69dab58",
+      "name": "baca_threshold",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "f6iwrB7cZ5zJgCWL",
+          "name": "Google Sheets account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// ==========================================\n// 1. SETUP THRESHOLD (Data Standar)\n// ==========================================\nconst thresholdItems = $('baca_threshold').all();\nconst limits = {};\n\nthresholdItems.forEach(item => {\n  const t = item.json;\n  if (t.Parameter) limits[t.Parameter] = t;\n});\n\n// ==========================================\n// 2. SETUP HELPER FUNCTIONS (OTAK TIKETING)\n// ==========================================\n\n// A. Menentukan PIC berdasarkan parameter yang gagal\nfunction getAssignedPICs(failedList) {\n  // Gabungkan semua error jadi satu string kecil biar mudah dicek\n  const text = failedList.join(\" \").toLowerCase();\n  \n  let recipients = [];\n  let emails = [];\n\n  // Logika Pembagian Tugas\n  if (text.includes(\"berat\")) {\n    recipients.push(\"Divisi_Produksi\");\n    emails.push(\"bintang.pandu87@gmail.com\");\n  }\n  if (text.includes(\"ph\")) {\n    recipients.push(\"Divisi_QA\");\n    emails.push(\"ryuga.kyuji@gmail.com\");\n  }\n  if (text.includes(\"dimensi\")) {\n    recipients.push(\"Divisi_QC\");\n    emails.push(\"jordanjeremi8@gmail.com\");\n  }\n  if (text.includes(\"visual\")) {\n    recipients.push(\"Divisi_DP\");\n    emails.push(\"paperian1880@gmail.com\");\n  }\n\n  // Fallback jika error tidak terdeteksi\n  if (recipients.length === 0) {\n    recipients.push(\"QC_Default\");\n    emails.push(\"acct19907@gmail.com\");\n  }\n\n  return { names: recipients.join(\", \"), emails: emails.join(\",\") };\n}\n\n// B. Menentukan Severity (Keparahan)\nfunction calculateSeverity(failedList) {\n  if (failedList.length >= 3) return \"High\";\n  if (failedList.length === 2) return \"Medium\";\n  return \"Low\";\n}\n\n// C. Menentukan SLA Deadline\nfunction getSlaDeadline(severity) {\n  const now = new Date();\n  if (severity === \"High\") now.setHours(now.getHours() + 4);       // +4 Jam\n  else if (severity === \"Medium\") now.setHours(now.getHours() + 8);// +8 Jam\n  else now.setHours(now.getHours() + 24);                          // +24 Jam\n  return now.toISOString();\n}\n\n// ==========================================\n// 3. AMBIL DATA INPUT & PROSES LOOPING\n// ==========================================\nconst inputRows = $('baca_response_form').all().map(item => item.json);\n\nreturn inputRows.map(row => {\n\n  let failedParams = [];\n  let passed = true;\n\n  // --- A. Cek Berat (g) ---\n  const thrBerat = limits[\"Berat (g)\"];\n  if (thrBerat) {\n    const nilai = parseFloat(row[\"Berat (g)\"]);\n    if (nilai < thrBerat.Min || nilai > thrBerat.Max) {\n      passed = false;\n      failedParams.push(`Berat tidak sesuai (${nilai}g)`);\n    }\n  }\n\n  // --- B. Cek pH ---\n  const thrPh = limits[\"pH\"];\n  if (thrPh) {\n    const nilai = parseFloat(row[\"pH\"]);\n    if (nilai < thrPh.Min || nilai > thrPh.Max) {\n      passed = false;\n      failedParams.push(`pH tidak sesuai (${nilai})`);\n    }\n  }\n\n  // --- C. Cek Dimensi (mm) ---\n  const thrDim = limits[\"Dimensi (mm)\"]; \n  if (thrDim) {\n    const nilai = parseFloat(row[\"Dimensi (mm)\"]);\n    if (nilai < thrDim.Min || nilai > thrDim.Max) {\n      passed = false;\n      failedParams.push(`Dimensi tidak sesuai (${nilai}mm)`);\n    }\n  }\n\n  // --- D. Cek Visual Defect ---\n  const thrVis = limits[\"Visual Defect\"];\n  const valVis = row[\"Visual Defect\"];\n  if (thrVis && valVis === thrVis.Min) {\n    passed = false;\n    failedParams.push(`Visual Defect ditemukan: ${valVis}`);\n  }\n\n  // ==========================================\n  // 4. HITUNG DATA TIKET (JIKA FAILED)\n  // ==========================================\n  \n  let ticketData = {\n    id: null,\n    severity: null,\n    sla: null,\n    picName: null,\n    picEmail: null,\n    qrUrl: null\n  };\n\n  if (!passed) {\n    // 1. Generate ID\n    ticketData.id = \"TKT-\" + Date.now().toString().slice(-6) + \"-\" + row[\"ID Produk\"];\n    \n    // 2. Hitung Severity & SLA\n    ticketData.severity = calculateSeverity(failedParams);\n    ticketData.sla = getSlaDeadline(ticketData.severity);\n    \n    // 3. Tentukan PIC\n    const picInfo = getAssignedPICs(failedParams);\n    ticketData.picName = picInfo.names;\n    ticketData.picEmail = picInfo.emails;\n\n    // 4. Generate QR Code URL\n    ticketData.qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${ticketData.id}`;\n  }\n\n  // ==========================================\n  // 5. OUTPUT FINAL JSON\n  // ==========================================\n  return {\n    json: {\n      ...row, \n      \"row_number\": row.row_number,\n\n      \"qc_status\": passed ? \"PASSED\" : \"FAILED\",\n      \"Parameter Gagal\": failedParams.join(\", \"),\n\n      \"ticket_id\": ticketData.id,\n      \"Severity\": ticketData.severity,\n      \"Sla_Deadline\": ticketData.sla,\n      \"Assigned (To)\": ticketData.picName,\n      \"Assigned_at\": passed ? null : new Date().toISOString(),\n      \"Pic_Email\": ticketData.picEmail,\n      \"QR_Code_Url\": ticketData.qrUrl,\n      \n      \"ticket_status\": passed ? null : \"Open\",\n      \"ticket_created_at\": passed ? null : new Date().toISOString(),\n      \n      // --- TAMBAHAN YANG HILANG ---\n      \"Escalation_Level\": passed ? null : 0,  // Default mulai dari 0\n      \"Is_sla_Overdue\": passed ? null : \"No\", // Default belum telat\n      // ----------------------------\n      \n      \"processed_at\": new Date().toISOString()\n    }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        992,
+        576
+      ],
+      "id": "d28c2a90-8ca8-4bb6-9ec9-907edb1f657d",
+      "name": "cek_kesesuaian"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.qc_status }}",
+                    "rightValue": "PASSED",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "f958a3b1-5463-48b9-a847-425cf698f40c"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "PASSED"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "8ae38982-ff28-4384-a610-9a5b68fca630",
+                    "leftValue": "={{ $json.qc_status }}",
+                    "rightValue": "FAILED",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "FAILED"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        1216,
+        576
+      ],
+      "id": "7288a127-3bcf-495e-97c4-e99fbefa0148",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1A4sjFOCGjOE6DFhr8h8M9AdOxpCytYBBHY-y8ardJcY",
+          "mode": "list",
+          "cachedResultName": "C Quality Control  (Jawaban)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1A4sjFOCGjOE6DFhr8h8M9AdOxpCytYBBHY-y8ardJcY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1563551034,
+          "mode": "list",
+          "cachedResultName": "QC_Respons",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1A4sjFOCGjOE6DFhr8h8M9AdOxpCytYBBHY-y8ardJcY/edit#gid=1563551034"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [
+            "Timestamp"
+          ],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "ID Produk",
+              "displayName": "ID Produk",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Batch Number",
+              "displayName": "Batch Number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Berat (g)",
+              "displayName": "Berat (g)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "pH",
+              "displayName": "pH",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Dimensi (mm)",
+              "displayName": "Dimensi (mm)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Visual Defect",
+              "displayName": "Visual Defect",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Operator",
+              "displayName": "Operator",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Waktu QC",
+              "displayName": "Waktu QC",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1664,
+        192
+      ],
+      "id": "2b73eb6d-40e4-44b6-a075-4456f97117de",
+      "name": "update_respons",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "f6iwrB7cZ5zJgCWL",
+          "name": "Google Sheets account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1A4sjFOCGjOE6DFhr8h8M9AdOxpCytYBBHY-y8ardJcY",
+          "mode": "list",
+          "cachedResultName": "C Quality Control  (Jawaban)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1A4sjFOCGjOE6DFhr8h8M9AdOxpCytYBBHY-y8ardJcY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1563551034,
+          "mode": "list",
+          "cachedResultName": "QC_Respons",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1A4sjFOCGjOE6DFhr8h8M9AdOxpCytYBBHY-y8ardJcY/edit#gid=1563551034"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [
+            "Timestamp"
+          ],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "ID Produk",
+              "displayName": "ID Produk",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Batch Number",
+              "displayName": "Batch Number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Berat (g)",
+              "displayName": "Berat (g)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "pH",
+              "displayName": "pH",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Dimensi (mm)",
+              "displayName": "Dimensi (mm)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Visual Defect",
+              "displayName": "Visual Defect",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Operator",
+              "displayName": "Operator",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Waktu QC",
+              "displayName": "Waktu QC",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1664,
+        960
+      ],
+      "id": "556f3141-a3c8-4164-aeae-34f64a8598b6",
+      "name": "update_respons1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "f6iwrB7cZ5zJgCWL",
+          "name": "Google Sheets account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1495f75f-8d50-4ce5-b61b-17585d17018f",
+              "name": "Timestamp",
+              "value": "={{ $json.Timestamp }}",
+              "type": "string"
+            },
+            {
+              "id": "d377bacb-3f7c-4acf-a9f3-3c48431e3aa8",
+              "name": "processed",
+              "value": "={{ $json.processed_at }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1440,
+        192
+      ],
+      "id": "087fa37d-8d09-4eec-8e92-82384f256523",
+      "name": "field_update"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1495f75f-8d50-4ce5-b61b-17585d17018f",
+              "name": "Timestamp",
+              "value": "={{ $json.Timestamp }}",
+              "type": "string"
+            },
+            {
+              "id": "d377bacb-3f7c-4acf-a9f3-3c48431e3aa8",
+              "name": "processed",
+              "value": "={{ $json.processed_at }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1440,
+        960
+      ],
+      "id": "60dfa8b2-0fa3-4353-85e6-df25369f412b",
+      "name": "field_update1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a1f28124-e44e-49ec-b686-698943e341d2",
+              "name": "Timestamp",
+              "value": "={{ $json.Timestamp }}",
+              "type": "string"
+            },
+            {
+              "id": "dd18f083-c180-4fbb-9a96-7d524dc99560",
+              "name": "ID Produk",
+              "value": "={{ $json[\"ID Produk\"] }}",
+              "type": "number"
+            },
+            {
+              "id": "f7f8610e-6ff6-4e38-9c0f-25e597c0a26e",
+              "name": "Batch Number",
+              "value": "={{ $json[\"Batch Number\"] }}",
+              "type": "number"
+            },
+            {
+              "id": "88e93a74-a689-42c7-8901-662d953fad03",
+              "name": "Berat (g)",
+              "value": "={{ $json[\"Berat (g)\"] }}",
+              "type": "number"
+            },
+            {
+              "id": "7284346e-e4e6-46c3-ad01-f6460d38fabf",
+              "name": "pH",
+              "value": "={{ $json.pH }}",
+              "type": "number"
+            },
+            {
+              "id": "0c931f87-beee-406a-a9aa-c32316461789",
+              "name": "Dimensi (mm)",
+              "value": "={{ $json[\"Dimensi (mm)\"] }}",
+              "type": "number"
+            },
+            {
+              "id": "0e31a5a3-50c0-4623-ba41-1ba61e7d528e",
+              "name": "Visual Defect",
+              "value": "={{ $json[\"Visual Defect\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "06c7d4f1-b761-4de5-982d-4f984be07d5b",
+              "name": "Operator",
+              "value": "={{ $json.Operator }}",
+              "type": "string"
+            },
+            {
+              "id": "06e6d896-2ca7-44dd-a019-917577d9f280",
+              "name": "Waktu QC",
+              "value": "={{ $json[\"Waktu QC\"] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1440,
+        384
+      ],
+      "id": "5e5057cc-4bdc-455b-b023-f22c1cffdf69",
+      "name": "field_passed"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a1f28124-e44e-49ec-b686-698943e341d2",
+              "name": "Timestamp",
+              "value": "={{ $json.Timestamp }}",
+              "type": "string"
+            },
+            {
+              "id": "dd18f083-c180-4fbb-9a96-7d524dc99560",
+              "name": "ID Produk",
+              "value": "={{ $json[\"ID Produk\"] }}",
+              "type": "number"
+            },
+            {
+              "id": "f7f8610e-6ff6-4e38-9c0f-25e597c0a26e",
+              "name": "Batch Number",
+              "value": "={{ $json[\"Batch Number\"] }}",
+              "type": "number"
+            },
+            {
+              "id": "88e93a74-a689-42c7-8901-662d953fad03",
+              "name": "Berat (g)",
+              "value": "={{ $json[\"Berat (g)\"] }}",
+              "type": "number"
+            },
+            {
+              "id": "7284346e-e4e6-46c3-ad01-f6460d38fabf",
+              "name": "pH",
+              "value": "={{ $json.pH }}",
+              "type": "number"
+            },
+            {
+              "id": "0c931f87-beee-406a-a9aa-c32316461789",
+              "name": "Dimensi (mm)",
+              "value": "={{ $json[\"Dimensi (mm)\"] }}",
+              "type": "number"
+            },
+            {
+              "id": "0e31a5a3-50c0-4623-ba41-1ba61e7d528e",
+              "name": "Visual Defect",
+              "value": "={{ $json[\"Visual Defect\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "06c7d4f1-b761-4de5-982d-4f984be07d5b",
+              "name": "Operator",
+              "value": "={{ $json.Operator }}",
+              "type": "string"
+            },
+            {
+              "id": "06e6d896-2ca7-44dd-a019-917577d9f280",
+              "name": "Waktu QC",
+              "value": "={{ $json[\"Waktu QC\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "642cfe7e-0fe7-4896-8000-3294f3bd45d6",
+              "name": "Parameter Gagal",
+              "value": "={{ $json[\"Parameter Gagal\"] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1440,
+        576
+      ],
+      "id": "d866a0fb-5cec-4cb9-b021-0bff81d0fa39",
+      "name": "field_failed"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1A4sjFOCGjOE6DFhr8h8M9AdOxpCytYBBHY-y8ardJcY",
+          "mode": "list",
+          "cachedResultName": "C Quality Control  (Jawaban)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1A4sjFOCGjOE6DFhr8h8M9AdOxpCytYBBHY-y8ardJcY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1597163498,
+          "mode": "list",
+          "cachedResultName": "QC_Passed",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1A4sjFOCGjOE6DFhr8h8M9AdOxpCytYBBHY-y8ardJcY/edit#gid=1597163498"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1664,
+        384
+      ],
+      "id": "b78872a8-b39a-466b-ae30-1bcaf86d496f",
+      "name": "sheet_passed",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "f6iwrB7cZ5zJgCWL",
+          "name": "Google Sheets account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1A4sjFOCGjOE6DFhr8h8M9AdOxpCytYBBHY-y8ardJcY",
+          "mode": "list",
+          "cachedResultName": "C Quality Control  (Jawaban)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1A4sjFOCGjOE6DFhr8h8M9AdOxpCytYBBHY-y8ardJcY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 2075803624,
+          "mode": "list",
+          "cachedResultName": "QC_Failled",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1A4sjFOCGjOE6DFhr8h8M9AdOxpCytYBBHY-y8ardJcY/edit#gid=2075803624"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1664,
+        576
+      ],
+      "id": "1baaa36a-90c7-431c-8788-084b60bb20fc",
+      "name": "sheet_failed",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "f6iwrB7cZ5zJgCWL",
+          "name": "Google Sheets account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "53aa3693-f86a-4f5c-a4ee-c2d9c33b48c3",
+              "name": "ticket_id",
+              "value": "={{ $json.ticket_id }}",
+              "type": "string"
+            },
+            {
+              "id": "a389bfa7-7b79-40eb-a2ad-39596dc9d854",
+              "name": "Batch Number",
+              "value": "={{ $json[\"Batch Number\"] }}",
+              "type": "number"
+            },
+            {
+              "id": "71790134-aed0-406a-8503-3bb53b5b8c39",
+              "name": "Parameter Gagal",
+              "value": "={{ $json[\"Parameter Gagal\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "0fab594d-26c9-4f5b-8870-37ea25a2f1ba",
+              "name": "Waktu QC",
+              "value": "={{ $json[\"Waktu QC\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "1b5e1913-d4c4-4035-8266-13de26c13542",
+              "name": "ticket_created_at",
+              "value": "={{ $json.ticket_created_at }}",
+              "type": "string"
+            },
+            {
+              "id": "74b32be8-7189-436e-95a4-91bf67ce653e",
+              "name": "Severity",
+              "value": "={{ $json.Severity }}",
+              "type": "string"
+            },
+            {
+              "id": "a156e040-d454-48af-849c-268fef8db2f4",
+              "name": "Assigned (To)",
+              "value": "={{ $json[\"Assigned (To)\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "6d4d4961-4b8a-4f17-8995-3acc3a33f5b8",
+              "name": "Sla_Deadline",
+              "value": "={{ $json.Sla_Deadline }}",
+              "type": "string"
+            },
+            {
+              "id": "5ff7ca1e-8608-47ac-a986-1ea2c93674e2",
+              "name": "QR_Code_Url",
+              "value": "={{ $json.QR_Code_Url }}",
+              "type": "string"
+            },
+            {
+              "id": "b8babc84-7b89-4840-a0ef-777c09d64f17",
+              "name": "QR_Code_Url",
+              "value": "={{ $json.QR_Code_Url }}",
+              "type": "string"
+            },
+            {
+              "id": "2ed078e6-b2a8-492c-a6d8-175e826a52c7",
+              "name": "ticket_status",
+              "value": "={{ $json.ticket_status }}",
+              "type": "string"
+            },
+            {
+              "id": "5615e6fb-6bf7-4b61-94c3-1c3d9a26d200",
+              "name": "Is_sla_Overdue",
+              "value": "={{ $json.Is_sla_Overdue }}",
+              "type": "string"
+            },
+            {
+              "id": "014baf8c-172a-4f8a-adb5-94c5b0776338",
+              "name": "Escalation_Level",
+              "value": "={{ $json.Escalation_Level }}",
+              "type": "number"
+            },
+            {
+              "id": "71f91281-5ded-439b-abf3-5313abe6b8bf",
+              "name": "Pic_Email",
+              "value": "={{ $json.Pic_Email }}",
+              "type": "string"
+            },
+            {
+              "id": "fdba66a1-5a1d-4593-b3b3-c02b73094ea9",
+              "name": "Assigned_at",
+              "value": "={{ $json.Assigned_at }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1440,
+        768
+      ],
+      "id": "07bb067a-b1d2-4b7e-84f9-86560a820323",
+      "name": "field_tiketing"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1A4sjFOCGjOE6DFhr8h8M9AdOxpCytYBBHY-y8ardJcY",
+          "mode": "list",
+          "cachedResultName": "C Quality Control  (Jawaban)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1A4sjFOCGjOE6DFhr8h8M9AdOxpCytYBBHY-y8ardJcY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 944630553,
+          "mode": "list",
+          "cachedResultName": "QC_Tiketing",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1A4sjFOCGjOE6DFhr8h8M9AdOxpCytYBBHY-y8ardJcY/edit#gid=944630553"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1664,
+        768
+      ],
+      "id": "eadf87fc-edd7-4bbd-86d4-9de05ea1837c",
+      "name": "sheet_ticket",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "f6iwrB7cZ5zJgCWL",
+          "name": "Google Sheets account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('baca_response_form').item.json.processed }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "empty",
+                      "singleValue": true
+                    },
+                    "id": "4d6c519c-ea60-4654-86a2-10bb969ba4bd"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "PROSES"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra",
+          "renameFallbackOutput": "SKIP"
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        768,
+        576
+      ],
+      "id": "99b7c112-d48a-46f9-91f0-badcbdee8d3d",
+      "name": "Switch1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a450e175-1d61-42ba-a776-22db7e059921",
+              "name": "ticket_id",
+              "value": "={{ $json.ticket_id }}",
+              "type": "string"
+            },
+            {
+              "id": "35808c90-37ac-46e4-b1ce-e9731e4e1d56",
+              "name": "ticket_status",
+              "value": "={{ $json.ticket_status }}",
+              "type": "string"
+            },
+            {
+              "id": "bd7e0299-04ef-4ba8-ab9a-026aa0cb4323",
+              "name": "Closed_at",
+              "value": "={{ $json.Closed_at }}",
+              "type": "string"
+            },
+            {
+              "id": "f3119de8-ac7b-435d-9cb5-7f70cb1e2cfb",
+              "name": "Root_Cause",
+              "value": "={{ $json.Root_Cause }}",
+              "type": "string"
+            },
+            {
+              "id": "b78a994b-a35c-4182-8288-59ad70bbbce1",
+              "name": "Corrective_Action",
+              "value": "={{ $json.Corrective_Action }}",
+              "type": "string"
+            },
+            {
+              "id": "6b36730f-e882-4dbe-8d23-1b0f9f674c23",
+              "name": "Assigned (To) Email",
+              "value": "={{ $json[\"Assigned (To) Email\"] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2672,
+        544
+      ],
+      "id": "0cddb00b-8c39-47ea-9284-6f7cd9fc1dfb",
+      "name": "Edit Fields"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row in sheet1": {
+      "main": [
+        [
+          {
+            "node": "Send a text message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "baca_response_form": {
+      "main": [
+        [
+          {
+            "node": "baca_threshold",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "baca_threshold": {
+      "main": [
+        [
+          {
+            "node": "Switch1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "cek_kesesuaian": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "field_update",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "field_passed",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "field_update1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "field_failed",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "field_tiketing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "field_update": {
+      "main": [
+        [
+          {
+            "node": "update_respons",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "field_update1": {
+      "main": [
+        [
+          {
+            "node": "update_respons1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "field_passed": {
+      "main": [
+        [
+          {
+            "node": "sheet_passed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "field_failed": {
+      "main": [
+        [
+          {
+            "node": "sheet_failed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "field_tiketing": {
+      "main": [
+        [
+          {
+            "node": "sheet_ticket",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch1": {
+      "main": [
+        [
+          {
+            "node": "cek_kesesuaian",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "sheet_ticket": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "1091ac2f-2882-410b-a0c6-f922664f5c3c",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "4102ce12f2391a303ecdaf7aa8587e759707cdfc3e0b2e03573700279b797f01"
+  },
+  "id": "k6A4hboDhetmbPK7",
+  "tags": []
+}
